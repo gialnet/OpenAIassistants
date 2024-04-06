@@ -2,6 +2,7 @@ package vivaldispring.eu.openaiassistants.controllers.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import vivaldispring.eu.openaiassistants.components.OpenAIAssistant;
 
@@ -24,9 +25,21 @@ public class AssistantRestController {
         openAIAssistant.CreateAnAssistant("Test", "Nothing");
     }
 
+    @GetMapping("/create2")
+    private void createAssistant2(){
+
+        openAIAssistant.CreateAnAssistantFunction();
+    }
+
     @GetMapping("/list")
     private ResponseEntity<?> listAssistant() throws IOException {
 
         return ResponseEntity.ok().body(openAIAssistant.getListAssistants());
+    }
+
+    @GetMapping("/del/{assistant_id}")
+    private ResponseEntity<?> deleteAssistant(@PathVariable String assistant_id) throws IOException {
+
+        return ResponseEntity.ok().body(openAIAssistant.deleteAssistant(assistant_id));
     }
 }

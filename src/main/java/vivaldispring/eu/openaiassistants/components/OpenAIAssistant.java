@@ -27,6 +27,11 @@ public interface OpenAIAssistant {
     // Returns a list of assistants
     // GET https://api.openai.com/v1/assistants
 
+    /*
+        Create assistant to call get domain code
+     */
+    void CreateAnAssistantFunction();
+
     public String getListAssistants() throws IOException;
 
     // Returns a list of assistant files.
@@ -44,7 +49,7 @@ public interface OpenAIAssistant {
     // modifiesAssistant(String assistant_id);
 
     // DELETE https://api.openai.com/v1/assistants/{assistant_id}
-    // deleteAssistant(String assistant_id);
+    String deleteAssistant(String assistant_id) throws IOException;
 
     // Create a thread
     // POST https://api.openai.com/v1/thread
@@ -53,6 +58,14 @@ public interface OpenAIAssistant {
     // Retrieves a thread
     // GET https://api.openai.com/v1/threads/{thread_id}
     // Thread getThread(thread_id);
+
+    // Delete a thread
+    // DELETE https://api.openai.com/v1/threads/{thread_id}
+    // deleteThread(String thread_id);
+
+    // Create a message
+    // POST https://api.openai.com/v1/threads/{thread_id}/messages
+    public void createMessageThread(String thread_id, String content);
 
 
 }
