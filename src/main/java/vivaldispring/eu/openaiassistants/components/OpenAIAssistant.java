@@ -39,7 +39,7 @@ public interface OpenAIAssistant {
 
     // Retrieves an assistant
     // GET https://api.openai.com/v1/assistants/{assistant_id}
-    // public String RetrievesAssistant(String assistant_id);
+    public String RetrievesAssistant(String assistant_id) throws IOException;
 
     // GET https://api.openai.com/v1/assistants/{assistant_id}/files/{file_id}
     // public String RetrievesAssistantFiles(String assistant_id, String file_id);

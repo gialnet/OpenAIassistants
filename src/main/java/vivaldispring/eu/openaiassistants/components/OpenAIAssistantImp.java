@@ -152,6 +152,35 @@ public class OpenAIAssistantImp implements OpenAIAssistant {
 
     }
 
+
+    @Override
+    public String RetrievesAssistant(String assistant_id) throws IOException {
+        String url = "https://api.openai.com/v1/assistants/" + assistant_id;
+
+        HttpClient httpClient = HttpClients.createDefault();
+        HttpGet request = new HttpGet(url);
+
+        // Set headers
+        request.setHeader("Content-Type", "application/json");
+        request.setHeader("Authorization", "Bearer " + OPENAI_API_KEY);
+        request.setHeader("OpenAI-Beta", "assistants=v1");
+
+        HttpResponse response = httpClient.execute(request);
+
+        // Read response content
+        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        StringBuilder result = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            result.append(line);
+        }
+
+        // this method return an AssistantJson object
+        // we need to get the id
+
+        return result.toString();
+    }
+
     // DELETE https://api.openai.com/v1/assistants/{assistant_id}
     @Override
     public String deleteAssistant(String assistant_id) throws IOException {
