@@ -40,8 +40,16 @@ public class ChatCompletionTest {
 }
      */
 
+    String mas ="mas es mas";
+    String cadena = STR."""
+            una bonita cadena de texto
+            \{mas}
+            """;
+
     @Test
     public void testChatCompletion() {
 
+
+        System.out.println(cadena);
     }
 }
