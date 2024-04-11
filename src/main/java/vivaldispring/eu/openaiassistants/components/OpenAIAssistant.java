@@ -30,7 +30,7 @@ public interface OpenAIAssistant {
     /*
         Create assistant to call get domain code
      */
-    void CreateAnAssistantFunction();
+    String CreateAnAssistantFunction();
 
     public String getListAssistants() throws IOException;
 

@@ -29,6 +29,8 @@ public class OpenAIAssistantImp implements OpenAIAssistant {
     private static final String API_URL_CREATE = "https://api.openai.com/v1/assistants";
     private static final String API_URL_LIST = "https://api.openai.com/v1/assistants?order=desc&limit=20";
     private static final String API_URL_THREAD = "https://api.openai.com/v1/threads";
+    private static final String INTRUCTIONS = """
+            You are an IT administrator responsible for managing a pool of WebLogic 12c servers. These servers are grouped into domains, each identified by a unique two-digit code (00-11) and a descriptive name (e.g., EXPERT, SYGMA).            Each domain further comprises various environments for different purposes: Integration, Development, Test, Pre-Production, Production, Training, and Stress-Test.            An existing REST API allows you to manage these servers. Your task is to leverage this API to access and interact with the WebLogic servers. Information Provided: JSON files containing details about the server organization (domain codes, names, environments) Documentation or specifications for the REST API (if available) Goal: Construct the base URI for the REST API.            Demonstrate how to construct URIs to access specific WebLogic servers within different environments using the domain code and environment name. Additional Considerations: Include any assumptions made about the JSON file format (e.g., structure, key names).Specify if authentication details are required for API access (username, password, token). If API documentation exists, reference it for specific API endpoints and parameters.            This improved version provides a clearer context, defines the goal, and outlines additional considerations. It also avoids subjective statements like: We have an amazing REST API, and focuses on providing a structured approach to accessing the WebLogic servers.""";
 
 
     /*
@@ -77,7 +79,8 @@ public class OpenAIAssistantImp implements OpenAIAssistant {
         Create assistant to call get domain code
      */
     @Override
-    public void CreateAnAssistantFunction() {
+    public String CreateAnAssistantFunction() {
+
 
         String jsonBody = "{\n" +
                 "        \"instructions\": \"You are a Weblogic expert who manage a Weglogic farm organize in domains with codes and names e.g. 00 Expert, 01 SYGMA, 03 Legacy, etc.\",\n" +
@@ -102,6 +105,35 @@ public class OpenAIAssistantImp implements OpenAIAssistant {
                 "        \"model\": \"gpt-4\"\n" +
                 "      }";
 
+        String jsonBody3 = " \"name\": \"Weblogic API expert\",\n" +
+                "        \"tools\": [{\n" +
+                "                          \"type\": \"function\",\n" +
+                "                          \"function\": {\n" +
+                "                            \"name\": \"get_domain_name\",\n" +
+                "                            \"description\": \"Get the domain name given a code\",\n" +
+                "                            \"parameters\": {\n" +
+                "                              \"type\": \"object\",\n" +
+                "                              \"properties\": {\n" +
+                "                                \"code\": {\n" +
+                "                                  \"type\": \"string\",\n" +
+                "                                  \"description\": \"The code of one domain\"\n" +
+                "                                }\n" +
+                "                              },\n" +
+                "                              \"required\": [\"code\"]\n" +
+                "                            }\n" +
+                "                          }\n" +
+                "                        }],\n" +
+                "        \"model\": \"gpt-4\"\n" +
+                "      }";
+
+        StringBuffer jsonBody2 = new StringBuffer("{");
+        jsonBody2.append("\"instructions\": \"");
+        jsonBody2.append(INTRUCTIONS);
+        jsonBody2.append("\",");
+        jsonBody2.append(jsonBody3);
+
+        String result;
+
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
 
             HttpPost httpPost = new HttpPost(API_URL_CREATE);
@@ -109,16 +141,18 @@ public class OpenAIAssistantImp implements OpenAIAssistant {
             httpPost.setHeader("Authorization", "Bearer " + OPENAI_API_KEY);
             httpPost.setHeader("OpenAI-Beta", "assistants=v1");
 
-            httpPost.setEntity(new StringEntity(jsonBody));
+            httpPost.setEntity(new StringEntity(jsonBody2.toString()));
 
             try (CloseableHttpResponse response = httpClient.execute(httpPost)){
-                String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 System.out.println(result);
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return result;
     }
 
     /*

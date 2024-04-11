@@ -26,9 +26,9 @@ public class AssistantRestController {
     }
 
     @GetMapping("/create2")
-    private void createAssistant2(){
+    private ResponseEntity<?> createAssistant2(){
 
-        openAIAssistant.CreateAnAssistantFunction();
+       return ResponseEntity.ok().body(openAIAssistant.CreateAnAssistantFunction());
     }
 
     @GetMapping("/list")
