@@ -3,7 +3,7 @@ package vivaldispring.eu.openaiassistants.data;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
-public class AssistantJsonTest {
+public class AssistantResponseJsonTest {
 
     String jsonResponse = """
             {
@@ -27,7 +27,7 @@ public class AssistantJsonTest {
     public void test() {
 
         Gson gson = new Gson();
-        AssistantJson json = gson.fromJson(jsonResponse, AssistantJson.class);
+        AssistantResponseJson json = gson.fromJson(jsonResponse, AssistantResponseJson.class);
         System.out.println(json.getInstructions());
     }
 }

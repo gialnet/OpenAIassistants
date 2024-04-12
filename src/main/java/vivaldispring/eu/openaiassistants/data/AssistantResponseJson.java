@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssistantJson {
+public class AssistantResponseJson {
     private String id;
     private String object;
     private long createdAt;
